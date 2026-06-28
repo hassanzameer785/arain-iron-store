@@ -69,12 +69,10 @@ router.put('/:id/status', protect, authorize('admin', 'employee'), async (req, r
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 });
 
-router.get('/:id/invoice', protect, async (req, res) => {
+router.get('/:id/invoice', protect, authorize('admin', 'employee'), async (req, res) => {
   try {
     const order = await Order.findById(req.params.id).populate('customer', 'name email');
     if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
-    if (req.user.role === 'customer' && order.customer._id.toString() !== req.user._id.toString())
-      return res.status(403).json({ success: false, message: 'Access denied' });
     res.setHeader('Content-Type', 'text/html');
     res.send(generateInvoiceHTML(order));
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }

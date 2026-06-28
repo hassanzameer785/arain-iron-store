@@ -107,6 +107,43 @@ export const CheckoutPage = () => {
   const [loading, setLoading] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState<any>(null);
 
+  useEffect(() => {
+    if (orderPlaced) {
+      try {
+        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+        if (AudioContextClass) {
+          const audioCtx = new AudioContextClass();
+          
+          // First chime note
+          const osc1 = audioCtx.createOscillator();
+          const gain1 = audioCtx.createGain();
+          osc1.connect(gain1);
+          gain1.connect(audioCtx.destination);
+          osc1.type = 'sine';
+          osc1.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+          gain1.gain.setValueAtTime(0.12, audioCtx.currentTime);
+          gain1.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+          osc1.start(audioCtx.currentTime);
+          osc1.stop(audioCtx.currentTime + 0.35);
+          
+          // Second chime note
+          const osc2 = audioCtx.createOscillator();
+          const gain2 = audioCtx.createGain();
+          osc2.connect(gain2);
+          gain2.connect(audioCtx.destination);
+          osc2.type = 'sine';
+          osc2.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.12); // E5
+          gain2.gain.setValueAtTime(0.12, audioCtx.currentTime + 0.12);
+          gain2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.47);
+          osc2.start(audioCtx.currentTime + 0.12);
+          osc2.stop(audioCtx.currentTime + 0.47);
+        }
+      } catch (e) {
+        console.error("Audio Context failed to play chime", e);
+      }
+    }
+  }, [orderPlaced]);
+
   const EASYPAISA_NUMBER = '03323884785'; // Malik Zameer
   const HBL_TITLE = 'Arain Iron Store';
   const HBL_ACCOUNT = '00427992039403';
@@ -145,14 +182,14 @@ export const CheckoutPage = () => {
           <p className="text-5xl mb-4">✅</p>
           <h2 className="text-xl font-black uppercase tracking-wider text-gray-900 dark:text-white mb-2">Order Placed!</h2>
           <p className="text-gray-500 dark:text-gray-400 text-sm mb-1">Order: <strong className="text-gray-800 dark:text-white font-mono">{orderPlaced.orderNumber}</strong></p>
-          <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">Total: <strong className="text-gray-800 dark:text-white">Rs. {total.toLocaleString()}</strong></p>
+          <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">Total: <strong className="text-gray-800 dark:text-white">Rs. {orderPlaced.totalAmount.toLocaleString()}</strong></p>
 
           <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-5 text-left mb-6">
             <p className="font-bold text-green-800 dark:text-green-300 text-sm mb-3">
               {paymentMethod === 'easypaisa' ? '📱 EasyPaisa' : '🏦 HBL Bank Transfer'} Payment Instructions
             </p>
             <div className="text-green-700 dark:text-green-400 text-xs leading-relaxed space-y-2">
-              <p>✅ Your order is received. Please transfer <strong>Rs. {total.toLocaleString()}</strong> to:</p>
+              <p>✅ Your order is received. Please transfer <strong>Rs. {orderPlaced.totalAmount.toLocaleString()}</strong> to:</p>
               
               {paymentMethod === 'easypaisa' ? (
                 <>
@@ -174,7 +211,7 @@ export const CheckoutPage = () => {
             </div>
             
             <a
-              href={`https://wa.me/923323884785?text=Assalam%20o%20Alaikum!%20I%20have%20sent%20Rs.%20${total}%20via%20${paymentMethod === 'easypaisa' ? 'EasyPaisa' : 'HBL'}%20for%20Order%20${orderPlaced.orderNumber}.%20Sender%20Info:%20${senderInfo}.%20Please%20verify%20receipt.`}
+              href={`https://wa.me/923323884785?text=Assalam%20o%20Alaikum!%20I%20have%20sent%20Rs.%20${orderPlaced.totalAmount}%20via%20${paymentMethod === 'easypaisa' ? 'EasyPaisa' : 'HBL'}%20for%20Order%20${orderPlaced.orderNumber}.%20Sender%20Info:%20${senderInfo}.%20Please%20verify%20receipt.`}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-4 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold text-xs uppercase tracking-wider py-3 rounded-lg w-full transition-colors"
@@ -400,8 +437,10 @@ export const OrdersPage = () => {
                 </div>
                 <div className="flex justify-between items-center border-t border-neutral-100 pt-3.5">
                   <span className="font-black text-neutral-900 text-xs">Rs. {o.totalAmount.toLocaleString()}</span>
-                  <span className={`text-[9px] uppercase tracking-wider px-2.5 py-0.5 rounded font-black border ${o.paymentStatus === 'paid' ? 'text-neutral-900 bg-neutral-100 border-neutral-300' : 'text-neutral-400 bg-white border-neutral-250'}`}>
-                    {o.paymentStatus === 'paid' ? 'PAID - ONLINE' : 'UNPAID'}
+                  <span className={`text-[9px] uppercase tracking-wider px-2.5 py-0.5 rounded font-black border ${o.paymentStatus === 'paid' ? 'text-green-700 bg-green-50 border-green-200' : 'text-amber-700 bg-amber-50 border-amber-250'}`}>
+                    {o.paymentStatus === 'paid' 
+                      ? `PAID - ${o.paymentMethod === 'easypaisa' ? 'EASYPAISA' : 'HBL BANK'}` 
+                      : 'UNPAID (PENDING VERIFICATION)'}
                   </span>
                 </div>
               </div>

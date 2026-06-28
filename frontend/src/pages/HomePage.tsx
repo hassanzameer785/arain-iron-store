@@ -49,22 +49,22 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
       <Header />
 
       {/* Hero Section */}
-      <section className="relative h-[85vh] flex items-center justify-center overflow-hidden">
-        {/* Background image with proper transparency */}
+      <section className="relative h-[85vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-800 to-indigo-900">
+        {/* Background image with clean contrast */}
         <img 
           src="/images/home_page_hero.png" 
           alt="Structural Steel girders background" 
-          className="absolute inset-0 w-full h-full object-cover opacity-40 dark:opacity-30" 
+          className="absolute inset-0 w-full h-full object-cover opacity-25 mix-blend-overlay" 
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/70 via-blue-900/40 to-gray-50 dark:to-gray-950 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-white dark:to-gray-950 z-10" />
 
         <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">
-          <div className="inline-block bg-white/20 dark:bg-white/10 backdrop-blur-sm border border-white/30 rounded-full px-5 py-2 mb-6">
-            <span className="text-white text-xs font-bold uppercase tracking-[0.2em]">🏗️ Trusted Since 1998</span>
+          <div className="inline-block bg-white/10 dark:bg-white/5 backdrop-blur-sm border border-white/20 rounded-full px-5 py-2 mb-6">
+            <span className="text-blue-100 text-xs font-bold uppercase tracking-[0.2em]">🏗️ Trusted Since 1998</span>
           </div>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 leading-none uppercase tracking-wide drop-shadow-lg">
             Arain Iron Store<br />
