@@ -53,24 +53,25 @@ const HomePage = () => {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative h-[85vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-800 to-indigo-900">
-        {/* Background image with clean contrast */}
+      <section className="relative h-[85vh] flex items-center justify-center overflow-hidden bg-zinc-950">
+        {/* Background image with grayscale filter to remove blue color */}
         <img 
           src="/images/home_page_hero.png" 
           alt="Structural Steel girders background" 
-          className="absolute inset-0 w-full h-full object-cover opacity-25 mix-blend-overlay" 
+          className="absolute inset-0 w-full h-full object-cover opacity-35 grayscale" 
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-white dark:to-gray-950 z-10" />
+        {/* Grayish transparent overlay for clean text legibility */}
+        <div className="absolute inset-0 bg-black/65 z-10" />
 
         <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">
           <div className="inline-block bg-white/10 dark:bg-white/5 backdrop-blur-sm border border-white/20 rounded-full px-5 py-2 mb-6">
-            <span className="text-blue-100 text-xs font-bold uppercase tracking-[0.2em]">🏗️ Trusted Since 1998</span>
+            <span className="text-zinc-200 text-xs font-bold uppercase tracking-[0.2em]">🏗️ Trusted Since 1998</span>
           </div>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 leading-none uppercase tracking-wide drop-shadow-lg">
             Arain Iron Store<br />
-            <span className="text-blue-300 font-light lowercase text-3xl md:text-4xl">Vehova</span>
+            <span className="text-zinc-300 font-light lowercase text-3xl md:text-4xl">Vehova</span>
           </h1>
-          <p className="text-xs md:text-sm text-blue-100 mb-10 max-w-xl mx-auto uppercase tracking-[0.15em] leading-relaxed">
+          <p className="text-xs md:text-sm text-zinc-200 mb-10 max-w-xl mx-auto uppercase tracking-[0.15em] leading-relaxed">
             Quality Construction Materials You Can Trust Since 1998
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -88,7 +89,7 @@ const HomePage = () => {
             {[['25+', 'Years Experience'], ['500+', 'Products'], ['1000+', 'Happy Customers']].map(([num, label]) => (
               <div key={label} className="text-center">
                 <p className="text-2xl font-black text-white">{num}</p>
-                <p className="text-blue-200 text-[10px] uppercase tracking-wider font-semibold mt-1">{label}</p>
+                <p className="text-zinc-300 text-[10px] uppercase tracking-wider font-semibold mt-1">{label}</p>
               </div>
             ))}
           </div>
